@@ -5,6 +5,18 @@ export type CheckoutItem = {
   price: number;
 };
 
+export type CheckoutCustomer = {
+  name: string;
+  email: string;
+  notes?: string;
+};
+
+export type CheckoutRequest = {
+  item: CheckoutItem;
+  customer: CheckoutCustomer;
+  siteUrl: string;
+};
+
 export type CheckoutResult = {
   provider: string;
   redirectUrl?: string;
@@ -12,5 +24,5 @@ export type CheckoutResult = {
 };
 
 export interface PaymentProvider {
-  createCheckout(item: CheckoutItem): Promise<CheckoutResult>;
+  createCheckout(request: CheckoutRequest): Promise<CheckoutResult>;
 }

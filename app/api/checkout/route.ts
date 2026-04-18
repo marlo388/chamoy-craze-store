@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getPaymentProvider } from "@/src/lib/payments";
+import type { CheckoutCustomer } from "@/src/lib/payments/types";
 
 export async function POST(request: Request) {
   const formData = await request.formData();
@@ -11,10 +12,19 @@ export async function POST(request: Request) {
     name: String(formData.get("name") || ""),
     price: Number(formData.get("price") || 0),
   };
+  const customer: CheckoutCustomer = {
+    name: String(formData.get("customerName") || ""),
+    email: String(formData.get("email") || ""),
+    notes: String(formData.get("notes") || ""),
+  };
 
   try {
     const provider = getPaymentProvider();
-    const result = await provider.createCheckout(item);
+    const result = await provider.createCheckout({
+      item,
+      customer,
+      siteUrl,
+    });
 
     if (result.redirectUrl) {
       return NextResponse.redirect(result.redirectUrl);

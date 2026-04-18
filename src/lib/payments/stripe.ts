@@ -1,8 +1,7 @@
-import type { CheckoutItem, CheckoutResult, PaymentProvider } from "./types";
+import type { CheckoutRequest, CheckoutResult, PaymentProvider } from "./types";
 
 export class StripePaymentProvider implements PaymentProvider {
-  async createCheckout(item: CheckoutItem): Promise<CheckoutResult> {
-    const siteUrl = process.env.SITE_URL || "http://localhost:3000";
+  async createCheckout({ item, siteUrl }: CheckoutRequest): Promise<CheckoutResult> {
 
     return {
       provider: "stripe",

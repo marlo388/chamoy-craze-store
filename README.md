@@ -118,14 +118,14 @@ Then register it in:
 
 `stripe.ts` and `paypal.ts` in this starter are safe placeholders. They show you where to put your real integration code.
 
-`ivno.ts` is set up to use Ivno-hosted payment links. Add one payment link per product in your environment variables, then the site will redirect buyers straight to Ivno checkout.
+`ivno.ts` is set up to create a real Ivno checkout session through the Ivno API and then redirect buyers straight to Ivno checkout.
 
 That means:
 
 - the website design is ready
 - the product structure is ready
 - the payment architecture is ready
-- you still need to add your real Ivno links or final payment API calls
+- you still need to add your real Ivno API credentials
 
 ## 13. Ivno setup
 
@@ -136,23 +136,27 @@ PAYMENT_PROVIDER=ivno
 SITE_URL=https://www.chamoycraze.online
 ```
 
-Then add either:
-
-- one fallback Ivno link for all products:
+Then add your API credentials from the Ivno merchant dashboard:
 
 ```env
-IVNO_PAYMENT_LINK=https://your-ivno-link
+IVNO_API_KEY=iv_live_your_api_key
+IVNO_API_SECRET=iv_secret_your_api_secret
+IVNO_DISPLAY_CURRENCY=USD
 ```
 
-- or one Ivno link per product:
+Optional branding:
 
 ```env
-IVNO_PAYMENT_LINK_CARNE_SECA_LUMBRE_SPICY=https://your-ivno-link
-IVNO_PAYMENT_LINK_TIZON_FUEGO_POWDER=https://your-ivno-link
-IVNO_PAYMENT_LINK_CHAMOY_PICKLE=https://your-ivno-link
+IVNO_CHECKOUT_COLOR=000000
+IVNO_CHECKOUT_LOGO_URL=https://www.chamoycraze.online/logo.png
 ```
 
-The product checkout route already supports these Ivno payment links.
+The checkout route will:
+
+1. send the order amount and buyer email to Ivno
+2. receive a `payment_url` back from Ivno
+3. redirect the buyer to Ivno checkout
+4. accept webhook calls at `/api/webhooks/ivno`
 
 ## 12. Fastest way to customize this
 
