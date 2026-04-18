@@ -2,14 +2,14 @@ import { redirect } from "next/navigation";
 import { getProductBySlug } from "@/src/data/products";
 import { formatMoney } from "@/src/lib/money";
 
-type SearchParams = Promise<{ slug?: string }>;
+type SearchParams = Promise<{ slug?: string; error?: string }>;
 
 export default async function CheckoutPage({
   searchParams,
 }: {
   searchParams: SearchParams;
 }) {
-  const { slug } = await searchParams;
+  const { slug, error } = await searchParams;
 
   if (!slug) {
     redirect("/shop");
@@ -34,8 +34,11 @@ export default async function CheckoutPage({
           <div className="price">{formatMoney(product.price)}</div>
         </div>
 
+        {error ? <p className="muted">{error}</p> : null}
+
         <form action="/api/checkout" method="post" className="checkout-form">
           <input type="hidden" name="id" value={product.id} />
+          <input type="hidden" name="slug" value={product.slug} />
           <input type="hidden" name="name" value={product.name} />
           <input type="hidden" name="price" value={product.price} />
 

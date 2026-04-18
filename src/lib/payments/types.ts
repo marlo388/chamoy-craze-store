@@ -1,5 +1,6 @@
 export type CheckoutItem = {
   id: string;
+  slug: string;
   name: string;
   price: number;
 };

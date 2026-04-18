@@ -79,6 +79,7 @@ PAYMENT_PROVIDER=manual
 Available starter options in this project:
 
 - `manual`
+- `ivno`
 - `stripe`
 - `paypal`
 
@@ -91,6 +92,7 @@ Payment routing starts here:
 Payment logic lives here:
 
 - `src/lib/payments/index.ts`
+- `src/lib/payments/ivno.ts`
 - `src/lib/payments/manual.ts`
 - `src/lib/payments/stripe.ts`
 - `src/lib/payments/paypal.ts`
@@ -116,12 +118,41 @@ Then register it in:
 
 `stripe.ts` and `paypal.ts` in this starter are safe placeholders. They show you where to put your real integration code.
 
+`ivno.ts` is set up to use Ivno-hosted payment links. Add one payment link per product in your environment variables, then the site will redirect buyers straight to Ivno checkout.
+
 That means:
 
 - the website design is ready
 - the product structure is ready
 - the payment architecture is ready
-- you still need to add your real API keys and final payment API calls
+- you still need to add your real Ivno links or final payment API calls
+
+## 13. Ivno setup
+
+If you want to use Ivno right now, set:
+
+```env
+PAYMENT_PROVIDER=ivno
+SITE_URL=https://www.chamoycraze.online
+```
+
+Then add either:
+
+- one fallback Ivno link for all products:
+
+```env
+IVNO_PAYMENT_LINK=https://your-ivno-link
+```
+
+- or one Ivno link per product:
+
+```env
+IVNO_PAYMENT_LINK_CARNE_SECA_LUMBRE_SPICY=https://your-ivno-link
+IVNO_PAYMENT_LINK_TIZON_FUEGO_POWDER=https://your-ivno-link
+IVNO_PAYMENT_LINK_CHAMOY_PICKLE=https://your-ivno-link
+```
+
+The product checkout route already supports these Ivno payment links.
 
 ## 12. Fastest way to customize this
 
