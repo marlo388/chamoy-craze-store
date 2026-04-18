@@ -27,12 +27,14 @@ export async function POST(request: Request) {
     });
 
     if (result.redirectUrl) {
-      return NextResponse.redirect(result.redirectUrl);
+      // Use 303 after a form POST so the browser performs a normal GET
+      // to the payment gateway instead of trying to repeat the POST.
+      return NextResponse.redirect(result.redirectUrl, { status: 303 });
     }
 
     const fallbackUrl = `${siteUrl}/checkout/success?provider=${encodeURIComponent(result.provider)}&product=${encodeURIComponent(item.name)}`;
 
-    return NextResponse.redirect(fallbackUrl);
+    return NextResponse.redirect(fallbackUrl, { status: 303 });
   } catch (error) {
     const message =
       error instanceof Error
@@ -42,6 +44,6 @@ export async function POST(request: Request) {
       item.slug,
     )}&error=${encodeURIComponent(message)}`;
 
-    return NextResponse.redirect(retryUrl);
+    return NextResponse.redirect(retryUrl, { status: 303 });
   }
 }
